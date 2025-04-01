@@ -13,27 +13,34 @@ class SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
-      child: Row(
-        children: [
-          if (icon != null) ...[
-            Icon(icon, color: Theme.of(context).colorScheme.primary, size: 28),
+      child: IntrinsicWidth(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icon != null) ...[
+              Icon(icon, color: Theme.of(context).colorScheme.primary, size: 28),
+              const SizedBox(width: 10),
+            ],
+            Text(
+              title,
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
             const SizedBox(width: 10),
+            Flexible(
+              fit: FlexFit.loose,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(minWidth: 100),
+                child: Divider(
+                  color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+                  thickness: 1,
+                ),
+              ),
+            ),
           ],
-          Text(
-            title,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Divider(
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
-              thickness: 1,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

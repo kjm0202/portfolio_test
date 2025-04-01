@@ -1,13 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio/portfolio_data.dart';
+import 'package:portfolio/section_widgets.dart';
 
 class HomeScreen extends StatelessWidget {
   final ProfileData profileData;
-
-  const HomeScreen({Key? key, required this.profileData}) : super(key: key);
+  final bool isDesktop;
+  
+  const HomeScreen({
+    Key? key, 
+    required this.profileData,
+    this.isDesktop = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    return isDesktop 
+        ? _buildDesktopView(context) 
+        : _buildMobileView(context);
+  }
+
+  Widget _buildMobileView(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -23,6 +35,342 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildDesktopView(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Hero Section
+          _buildDesktopHeroSection(context),
+          
+          const SizedBox(height: 60),
+          
+          // About Section
+          _buildDesktopAboutSection(context),
+          
+          const SizedBox(height: 60),
+          
+          // Expertise Section
+          _buildDesktopExpertiseSection(context),
+          
+          const SizedBox(height: 60),
+          
+          // Projects Section
+          _buildDesktopProjectsSection(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDesktopHeroSection(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        // Left content - Text and buttons
+        Expanded(
+          flex: 3,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Hello text
+              Text(
+                'Hello, I am',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              
+              const SizedBox(height: 12),
+              
+              // Name
+              Text(
+                profileData.name,
+                style: TextStyle(
+                  fontSize: 48,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onBackground,
+                ),
+              ),
+              
+              const SizedBox(height: 8),
+              
+              // Role/Tagline
+              Text(
+                profileData.tagline,
+                style: TextStyle(
+                  fontSize: 24,
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              
+              const SizedBox(height: 16),
+              
+              // Description
+              Text(
+                'Building beautiful cross-platform applications',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7),
+                ),
+              ),
+              
+              const SizedBox(height: 32),
+              
+              // Action buttons
+              Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    ),
+                    child: const Text('Contact Me'),
+                  ),
+                  const SizedBox(width: 16),
+                  OutlinedButton.icon(
+                    onPressed: () {},
+                    icon: const Icon(Icons.remove_red_eye),
+                    label: const Text('View Projects'),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                      side: BorderSide(color: Theme.of(context).colorScheme.primary),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        
+        // Right content - Profile image
+        Expanded(
+          flex: 2,
+          child: Container(
+            height: 300,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Theme.of(context).colorScheme.primary,
+                  Theme.of(context).colorScheme.primary.withOpacity(0.8),
+                ],
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
+              ],
+            ),
+            child: Center(
+              child: Icon(
+                Icons.person,
+                size: 120,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDesktopAboutSection(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Section title
+        const SectionTitle(title: 'About', icon: Icons.person),
+        
+        const SizedBox(height: 24),
+        
+        // About content
+        Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'About Me',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                profileData.bio,
+                style: TextStyle(
+                  fontSize: 16,
+                  height: 1.6,
+                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDesktopExpertiseSection(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Section title
+        const SectionTitle(title: 'Expertise', icon: Icons.star),
+        
+        const SizedBox(height: 24),
+        
+        // Expertise content in a grid
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+            childAspectRatio: 4,
+          ),
+          itemCount: profileData.expertise.length,
+          itemBuilder: (context, index) {
+            final expertise = profileData.expertise[index];
+            return Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    _getExpertiseIcon(expertise),
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 24,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          expertise,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          _getExpertiseDescription(expertise),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  IconData _getExpertiseIcon(String expertise) {
+    if (expertise.contains('Flutter')) return Icons.flutter_dash;
+    if (expertise.contains('UI/UX')) return Icons.design_services;
+    if (expertise.contains('Mobile')) return Icons.smartphone;
+    if (expertise.contains('Architecture')) return Icons.architecture;
+    if (expertise.contains('Cross-Platform')) return Icons.devices;
+    return Icons.code;
+  }
+
+  String _getExpertiseDescription(String expertise) {
+    if (expertise.contains('Flutter')) return 'Building beautiful native apps with Flutter';
+    if (expertise.contains('UI/UX')) return 'Creating intuitive and engaging user interfaces';
+    if (expertise.contains('Mobile')) return 'Native mobile app development for Android and iOS';
+    if (expertise.contains('Architecture')) return 'Designing robust and scalable app architecture';
+    if (expertise.contains('Cross-Platform')) return 'Building once, deploying everywhere';
+    return 'Expert in development technologies and tools';
+  }
+
+  Widget _buildDesktopProjectsSection(BuildContext context) {
+    // Only take first 3 projects for featured section
+    final featuredProjects = profileData.projects.take(3).toList();
+    
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Section title with View All button
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const SectionTitle(title: 'Featured Projects', icon: Icons.work),
+            TextButton.icon(
+              onPressed: () {},
+              icon: const Icon(Icons.arrow_forward),
+              label: const Text('View All'),
+              style: TextButton.styleFrom(
+                foregroundColor: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+          ],
+        ),
+        
+        const SizedBox(height: 24),
+        
+        // Projects grid
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 20,
+            childAspectRatio: 0.8,
+          ),
+          itemCount: featuredProjects.length,
+          itemBuilder: (context, index) {
+            final project = featuredProjects[index];
+            return ProjectCard(project: project);
+          },
+        ),
+      ],
     );
   }
 
@@ -46,9 +394,7 @@ class HomeScreen extends StatelessWidget {
             ),
             child: CircleAvatar(
               radius: 80,
-              backgroundColor: Theme.of(
-                context,
-              ).colorScheme.primary.withOpacity(0.1),
+              backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
               backgroundImage: NetworkImage(profileData.photoUrl),
               onBackgroundImageError: (exception, stackTrace) {},
               child: ClipOval(
@@ -57,12 +403,11 @@ class HomeScreen extends StatelessWidget {
                   fit: BoxFit.cover,
                   width: 160,
                   height: 160,
-                  errorBuilder:
-                      (context, error, stackTrace) => Icon(
-                        Icons.person,
-                        size: 80,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
+                  errorBuilder: (context, error, stackTrace) => Icon(
+                    Icons.person,
+                    size: 80,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
               ),
             ),
@@ -81,8 +426,8 @@ class HomeScreen extends StatelessWidget {
                 child: Text(
                   profileData.name,
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                        fontWeight: FontWeight.bold,
+                      ),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -103,8 +448,8 @@ class HomeScreen extends StatelessWidget {
                 child: Text(
                   profileData.tagline,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -144,10 +489,7 @@ class HomeScreen extends StatelessWidget {
                 // Implement PDF resume download
               },
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 12,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               ),
             ),
             const SizedBox(width: 16),
@@ -158,10 +500,7 @@ class HomeScreen extends StatelessWidget {
                 // Implement contact navigation
               },
               style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 12,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               ),
             ),
           ],
@@ -178,18 +517,15 @@ class HomeScreen extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 16.0),
           child: Text(
             'Areas of Expertise',
-            style: Theme.of(
-              context,
-            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
           ),
         ),
         Wrap(
           spacing: 12,
           runSpacing: 12,
-          children:
-              profileData.expertise
-                  .map((expertise) => _buildExpertiseChip(context, expertise))
-                  .toList(),
+          children: profileData.expertise.map((expertise) => _buildExpertiseChip(context, expertise)).toList(),
         ),
       ],
     );
@@ -230,7 +566,7 @@ class HomeScreen extends StatelessWidget {
   Widget _buildFeaturedProjects(BuildContext context) {
     // Only show a preview of projects (first 2)
     final previewProjects = profileData.projects.take(2).toList();
-
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -239,9 +575,9 @@ class HomeScreen extends StatelessWidget {
           children: [
             Text(
               'Featured Projects',
-              style: Theme.of(
-                context,
-              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             TextButton.icon(
               icon: const Icon(Icons.arrow_forward),
@@ -261,28 +597,26 @@ class HomeScreen extends StatelessWidget {
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(child: previewProjects[0].buildPreviewCard(context)),
+                  Expanded(
+                    child: previewProjects[0].buildPreviewCard(context),
+                  ),
                   const SizedBox(width: 16),
                   Expanded(
-                    child:
-                        previewProjects.length > 1
-                            ? previewProjects[1].buildPreviewCard(context)
-                            : Container(),
+                    child: previewProjects.length > 1
+                        ? previewProjects[1].buildPreviewCard(context)
+                        : Container(),
                   ),
                 ],
               );
             } else {
               // Column for smaller screens
               return Column(
-                children:
-                    previewProjects
-                        .map(
-                          (project) => Padding(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            child: project.buildPreviewCard(context),
-                          ),
-                        )
-                        .toList(),
+                children: previewProjects
+                    .map((project) => Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: project.buildPreviewCard(context),
+                        ))
+                    .toList(),
               );
             }
           },
@@ -308,18 +642,17 @@ extension ProjectPreview on Project {
             height: 160,
             width: double.infinity,
             fit: BoxFit.cover,
-            errorBuilder:
-                (context, error, stackTrace) => Container(
-                  height: 160,
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
-                  child: Center(
-                    child: Icon(
-                      Icons.image,
-                      color: Theme.of(context).colorScheme.primary,
-                      size: 40,
-                    ),
-                  ),
+            errorBuilder: (context, error, stackTrace) => Container(
+              height: 160,
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+              child: Center(
+                child: Icon(
+                  Icons.image,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 40,
                 ),
+              ),
+            ),
           ),
           // Project details
           Padding(
@@ -330,34 +663,32 @@ extension ProjectPreview on Project {
                 Text(
                   title,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 const SizedBox(height: 8),
-                Text(description, maxLines: 2, overflow: TextOverflow.ellipsis),
+                Text(
+                  description,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
                 const SizedBox(height: 12),
                 Wrap(
                   spacing: 6,
                   runSpacing: 6,
-                  children:
-                      technologies
-                          .map(
-                            (tech) => Chip(
-                              materialTapTargetSize:
-                                  MaterialTapTargetSize.shrinkWrap,
-                              label: Text(
-                                tech,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                ),
+                  children: technologies
+                      .map((tech) => Chip(
+                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            label: Text(
+                              tech,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.surfaceVariant,
                             ),
-                          )
-                          .toList(),
+                            backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+                          ))
+                      .toList(),
                 ),
               ],
             ),
